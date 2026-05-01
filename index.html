@@ -1,0 +1,545 @@
+<!DOCTYPE html>
+<html lang="en">
+<head>
+  <meta charset="UTF-8" />
+  <meta name="viewport" content="width=device-width, initial-scale=1.0" />
+  <title>Roblox World Tour Event</title>
+
+  <style>
+    * {
+      box-sizing: border-box;
+    }
+
+    body {
+      margin: 0;
+      font-family: Impact, Haettenschweiler, "Arial Narrow Bold", sans-serif;
+      background:
+        radial-gradient(circle at center top, rgba(255, 0, 0, 0.18), transparent 32%),
+        linear-gradient(180deg, #050505 0%, #080808 50%, #130000 100%);
+      color: white;
+      overflow-x: hidden;
+    }
+
+    body::before {
+      content: "";
+      position: fixed;
+      inset: 0;
+      background:
+        linear-gradient(rgba(255,0,0,.08) 1px, transparent 1px),
+        linear-gradient(90deg, rgba(255,0,0,.08) 1px, transparent 1px);
+      background-size: 70px 70px;
+      opacity: .25;
+      pointer-events: none;
+    }
+
+    .nav {
+      height: 72px;
+      display: flex;
+      align-items: center;
+      justify-content: space-between;
+      padding: 0 34px;
+      border-bottom: 2px solid #e00000;
+      background: rgba(0,0,0,.9);
+      position: sticky;
+      top: 0;
+      z-index: 10;
+    }
+
+    .logo {
+      font-size: 34px;
+      letter-spacing: 3px;
+      color: white;
+      text-shadow: 0 0 8px rgba(255,255,255,.4);
+    }
+
+    .nav-links {
+      display: flex;
+      gap: 42px;
+      font-size: 18px;
+      letter-spacing: 1px;
+    }
+
+    .nav-links a {
+      color: white;
+      text-decoration: none;
+    }
+
+    .nav-links a:hover {
+      color: #ff1a1a;
+    }
+
+    .ticket-btn {
+      border: 2px solid #ff1a1a;
+      color: #ff1a1a;
+      padding: 13px 24px;
+      text-decoration: none;
+      letter-spacing: 1px;
+      box-shadow: 0 0 16px rgba(255,0,0,.35);
+    }
+
+    .hero {
+      max-width: 1200px;
+      margin: 0 auto;
+      padding: 42px 25px 0;
+      text-align: center;
+      position: relative;
+    }
+
+    .title-main {
+      font-size: clamp(72px, 14vw, 190px);
+      line-height: .78;
+      margin: 0;
+      color: #f5f5f5;
+      letter-spacing: 5px;
+      text-shadow: 0 4px 0 #666, 0 0 20px rgba(255,255,255,.3);
+    }
+
+    .title-red {
+      font-size: clamp(58px, 10vw, 132px);
+      color: #e00000;
+      margin: 10px 0 0;
+      line-height: .82;
+      letter-spacing: 4px;
+      text-shadow: 0 0 20px rgba(255,0,0,.4);
+      border-bottom: 3px solid #e00000;
+      padding-bottom: 18px;
+    }
+
+    .tagline {
+      margin: 18px 0 34px;
+      font-size: clamp(26px, 4vw, 48px);
+      letter-spacing: 5px;
+      color: #eee;
+      text-shadow: 0 0 10px rgba(255,255,255,.35);
+    }
+
+    .tour-grid {
+      display: grid;
+      grid-template-columns: 1fr 1fr;
+      gap: 46px;
+      max-width: 1050px;
+      margin: 0 auto;
+      position: relative;
+      z-index: 2;
+    }
+
+    .tour-column {
+      display: flex;
+      flex-direction: column;
+      gap: 10px;
+    }
+
+    .event-row {
+      display: grid;
+      grid-template-columns: 84px 150px 1fr;
+      gap: 12px;
+      align-items: center;
+      border-bottom: 1px solid rgba(255,255,255,.22);
+      padding: 6px 0 10px;
+      text-align: left;
+    }
+
+    .status {
+      font-size: 18px;
+      color: #ff1a1a;
+      letter-spacing: 1px;
+    }
+
+    .status.new {
+      color: #00bfff;
+    }
+
+    .date-box {
+      height: 43px;
+      border: 2px solid #ff1a1a;
+      background: rgba(0,0,0,.58);
+      color: white;
+      display: flex;
+      align-items: center;
+      justify-content: center;
+      font-size: 18px;
+      letter-spacing: 1px;
+      box-shadow: 0 0 12px rgba(255,0,0,.25);
+    }
+
+    .new + .date-box,
+    .date-box.blue {
+      border-color: #00bfff;
+      box-shadow: 0 0 12px rgba(0,191,255,.25);
+    }
+
+    .city {
+      color: #fff000;
+      font-size: 24px;
+      letter-spacing: 1px;
+      text-shadow: 0 0 8px rgba(255,255,0,.2);
+    }
+
+    .stage {
+      max-width: 1100px;
+      margin: -15px auto 0;
+      min-height: 410px;
+      position: relative;
+      background:
+        radial-gradient(circle at center, rgba(255,0,0,.4), transparent 22%),
+        linear-gradient(180deg, transparent 0%, rgba(255,0,0,.15) 55%, rgba(0,0,0,.2) 100%);
+      overflow: hidden;
+    }
+
+    .stage::before {
+      content: "◇";
+      position: absolute;
+      font-size: 145px;
+      color: #ff1717;
+      left: 50%;
+      top: 24px;
+      transform: translateX(-50%) rotate(7deg);
+      text-shadow: 0 0 28px #ff1717;
+      opacity: .9;
+    }
+
+    .avatars {
+      position: absolute;
+      left: 50%;
+      bottom: 0;
+      transform: translateX(-50%);
+      display: flex;
+      gap: 14px;
+      align-items: flex-end;
+      justify-content: center;
+      width: 100%;
+      padding: 0 20px;
+    }
+
+    .avatar {
+      width: 160px;
+      height: 245px;
+      border-radius: 24px 24px 8px 8px;
+      background:
+        linear-gradient(180deg, #222, #050505);
+      border: 2px solid rgba(255,0,0,.35);
+      box-shadow: 0 0 22px rgba(255,0,0,.28);
+      position: relative;
+    }
+
+    .avatar::before {
+      content: "";
+      position: absolute;
+      width: 78px;
+      height: 78px;
+      border-radius: 18px;
+      background: #b36b42;
+      top: 18px;
+      left: 50%;
+      transform: translateX(-50%);
+      box-shadow: inset 0 -8px 0 rgba(0,0,0,.15);
+    }
+
+    .avatar::after {
+      content: "ROBLOX";
+      position: absolute;
+      top: 128px;
+      left: 0;
+      right: 0;
+      color: white;
+      font-size: 20px;
+      letter-spacing: 1px;
+    }
+
+    .avatar.pink {
+      background: linear-gradient(180deg, #ff8fc8, #222);
+      height: 260px;
+    }
+
+    .avatar.red {
+      background: linear-gradient(180deg, #9b0000, #050505);
+      height: 250px;
+    }
+
+    .features {
+      max-width: 1100px;
+      margin: 28px auto 28px;
+      display: grid;
+      grid-template-columns: repeat(4, 1fr);
+      border: 1px solid rgba(255,255,255,.16);
+      background: rgba(0,0,0,.72);
+      box-shadow: 0 0 24px rgba(255,0,0,.2);
+    }
+
+    .feature {
+      padding: 22px 20px;
+      border-right: 1px solid rgba(255,0,0,.45);
+      display: flex;
+      gap: 16px;
+      align-items: center;
+      text-align: left;
+    }
+
+    .feature:last-child {
+      border-right: 0;
+    }
+
+    .icon {
+      font-size: 38px;
+      color: #ff1a1a;
+    }
+
+    .feature strong {
+      display: block;
+      font-size: 18px;
+      letter-spacing: 1px;
+    }
+
+    .feature span {
+      font-family: Arial, sans-serif;
+      font-size: 14px;
+      color: #ddd;
+    }
+
+    footer {
+      max-width: 1100px;
+      margin: 0 auto;
+      padding: 18px 25px 35px;
+      display: flex;
+      justify-content: space-between;
+      color: #aaa;
+      font-family: Arial, sans-serif;
+      font-size: 13px;
+    }
+
+    /* Edit these on GitHub:
+       - Change the status text: SOLD OUT / NEW DATE / OPEN
+       - Change the date inside each .date-box
+       - Change the city inside each .city
+    */
+
+    @media (max-width: 850px) {
+      .nav {
+        height: auto;
+        padding: 18px;
+        flex-direction: column;
+        gap: 14px;
+      }
+
+      .nav-links {
+        gap: 18px;
+        flex-wrap: wrap;
+        justify-content: center;
+      }
+
+      .tour-grid {
+        grid-template-columns: 1fr;
+        gap: 18px;
+      }
+
+      .event-row {
+        grid-template-columns: 80px 125px 1fr;
+      }
+
+      .city {
+        font-size: 19px;
+      }
+
+      .stage {
+        min-height: 280px;
+      }
+
+      .avatar {
+        width: 90px;
+        height: 155px;
+      }
+
+      .avatar.pink,
+      .avatar.red {
+        height: 165px;
+      }
+
+      .avatar::before {
+        width: 48px;
+        height: 48px;
+      }
+
+      .avatar::after {
+        font-size: 12px;
+        top: 88px;
+      }
+
+      .features {
+        grid-template-columns: 1fr;
+        margin: 20px;
+      }
+
+      .feature {
+        border-right: 0;
+        border-bottom: 1px solid rgba(255,0,0,.45);
+      }
+
+      footer {
+        flex-direction: column;
+        gap: 8px;
+        text-align: center;
+      }
+    }
+  </style>
+</head>
+
+<body>
+  <nav class="nav">
+    <div class="logo">ROBLOX</div>
+
+    <div class="nav-links">
+      <a href="#">HOME</a>
+      <a href="#tour">TOUR</a>
+      <a href="#creators">CREATORS</a>
+      <a href="#faq">FAQ</a>
+    </div>
+
+    <a class="ticket-btn" href="#">GET TICKETS 🎟</a>
+  </nav>
+
+  <main class="hero">
+    <h1 class="title-main">ROBLOX</h1>
+    <h2 class="title-red">WORLD TOUR</h2>
+    <div class="tagline">PLAY. CREATE. CONNECT.</div>
+
+    <section id="tour" class="tour-grid">
+      <div class="tour-column">
+        <div class="event-row">
+          <div class="status">SOLD OUT</div>
+          <div class="date-box">06.01.2025</div>
+          <div class="city">LOS ANGELES, CA</div>
+        </div>
+
+        <div class="event-row">
+          <div class="status">SOLD OUT</div>
+          <div class="date-box">06.07.2025</div>
+          <div class="city">NEW YORK, NY</div>
+        </div>
+
+        <div class="event-row">
+          <div class="status">SOLD OUT</div>
+          <div class="date-box">06.14.2025</div>
+          <div class="city">CHICAGO, IL</div>
+        </div>
+
+        <div class="event-row">
+          <div class="status">SOLD OUT</div>
+          <div class="date-box">06.21.2025</div>
+          <div class="city">ATLANTA, GA</div>
+        </div>
+
+        <div class="event-row">
+          <div class="status new">NEW DATE</div>
+          <div class="date-box blue">06.28.2025</div>
+          <div class="city">DALLAS, TX</div>
+        </div>
+
+        <div class="event-row">
+          <div class="status">SOLD OUT</div>
+          <div class="date-box">07.05.2025</div>
+          <div class="city">MIAMI, FL</div>
+        </div>
+
+        <div class="event-row">
+          <div class="status">SOLD OUT</div>
+          <div class="date-box">07.12.2025</div>
+          <div class="city">TORONTO, ON</div>
+        </div>
+
+        <div class="event-row">
+          <div class="status">SOLD OUT</div>
+          <div class="date-box">07.19.2025</div>
+          <div class="city">SEATTLE, WA</div>
+        </div>
+      </div>
+
+      <div class="tour-column">
+        <div class="event-row">
+          <div class="status">SOLD OUT</div>
+          <div class="date-box">07.26.2025</div>
+          <div class="city">LONDON, UK</div>
+        </div>
+
+        <div class="event-row">
+          <div class="status">SOLD OUT</div>
+          <div class="date-box">08.02.2025</div>
+          <div class="city">AMSTERDAM, NL</div>
+        </div>
+
+        <div class="event-row">
+          <div class="status new">NEW DATE</div>
+          <div class="date-box blue">08.09.2025</div>
+          <div class="city">PARIS, FR</div>
+        </div>
+
+        <div class="event-row">
+          <div class="status">SOLD OUT</div>
+          <div class="date-box">08.16.2025</div>
+          <div class="city">BERLIN, DE</div>
+        </div>
+
+        <div class="event-row">
+          <div class="status">SOLD OUT</div>
+          <div class="date-box">08.23.2025</div>
+          <div class="city">SYDNEY, AU</div>
+        </div>
+
+        <div class="event-row">
+          <div class="status new">NEW DATE</div>
+          <div class="date-box blue">08.30.2025</div>
+          <div class="city">TOKYO, JP</div>
+        </div>
+
+        <div class="event-row">
+          <div class="status">SOLD OUT</div>
+          <div class="date-box">09.06.2025</div>
+          <div class="city">SÃO PAULO, BR</div>
+        </div>
+
+        <div class="event-row">
+          <div class="status">SOLD OUT</div>
+          <div class="date-box">09.13.2025</div>
+          <div class="city">MEXICO CITY, MX</div>
+        </div>
+      </div>
+    </section>
+
+    <section class="stage">
+      <div class="avatars">
+        <div class="avatar"></div>
+        <div class="avatar pink"></div>
+        <div class="avatar"></div>
+        <div class="avatar red"></div>
+        <div class="avatar"></div>
+      </div>
+    </section>
+  </main>
+
+  <section id="creators" class="features">
+    <div class="feature">
+      <div class="icon">◆</div>
+      <div><strong>EXPLORE WORLDS</strong><span>Discover endless experiences</span></div>
+    </div>
+
+    <div class="feature">
+      <div class="icon">👥</div>
+      <div><strong>MEET CREATORS</strong><span>Connect with your favorite creators</span></div>
+    </div>
+
+    <div class="feature">
+      <div class="icon">🎁</div>
+      <div><strong>EXCLUSIVE ITEMS</strong><span>Unlock limited virtual rewards</span></div>
+    </div>
+
+    <div class="feature">
+      <div class="icon">⏱</div>
+      <div><strong>LIMITED TIME ONLY</strong><span>Don’t miss your chance to join</span></div>
+    </div>
+  </section>
+
+  <footer id="faq">
+    <strong>ROBLOX WORLD TOUR</strong>
+    <span>Unofficial fan-made event page template for learning HTML/CSS.</span>
+  </footer>
+</body>
+</html>
